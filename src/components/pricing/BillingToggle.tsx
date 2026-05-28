@@ -34,7 +34,7 @@ export default function BillingToggle({ committed, preview, onPreview, onCommit,
           onClick={() => onCommit("annual")}
           aria-pressed={committed === "annual"}
         >
-          Annual <span className="save-chip">save up to 25%</span>
+          Annual
         </button>
       </div>
       <span className="billing-hint">Hover or tap a tab — prices update live</span>

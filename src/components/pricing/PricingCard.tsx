@@ -38,7 +38,6 @@ export default function PricingCard({ tier, billing, onSubscribe }: Props) {
   const perTalent = billing === "annual" ? tier.perTalentAnnual : tier.perTalentMonthly;
   const perTalentWas = billing === "annual" ? tier.perTalentWasAnnual : tier.perTalentWasMonthly;
   const strike = billing === "annual" ? tier.strikeAnnual : tier.strikeMonthly;
-  const beats = billing === "annual" ? tier.beatsAnnual : tier.beatsMonthly;
 
   return (
     <article className={`price-card${tier.featured ? " featured" : ""}`} data-tier={tier.id}>
@@ -69,8 +68,6 @@ export default function PricingCard({ tier, billing, onSubscribe }: Props) {
           </span>
         )}
       </div>
-
-      <div className="beats-note">{beats}</div>
 
       <ul className="feature-list">
         {tier.features.map((f) => (
