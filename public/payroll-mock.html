@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TalentPortal — Payroll preview</title>
+    <meta name="viewport" content="width=1440" />
+    <style>
+      :root {
+        --bg: #f3efe6;
+        --panel: #ffffff;
+        --ink: #0c1f17;
+        --ink-soft: #2d3a32;
+        --muted: #6c7a72;
+        --line: #e3dccb;
+        --line-strong: #d7cfba;
+        --green: #0d4a2f;
+        --green-deep: #0a3a25;
+        --green-soft: #e8efe9;
+        --pill: #f7f3e8;
+        --shadow: 0 2px 0 rgba(12, 31, 23, 0.04);
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        font-size: 14px;
+        line-height: 1.4;
+        -webkit-font-smoothing: antialiased;
+      }
+      .app {
+        display: grid;
+        grid-template-columns: 248px 1fr;
+        min-height: 900px;
+        width: 1440px;
+      }
+
+      /* Sidebar */
+      .side {
+        background: var(--pill);
+        border-right: 1px solid var(--line);
+        padding: 22px 18px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 0 4px;
+      }
+      .brand-mark {
+        width: 90px;
+        height: 90px;
+        border-radius: 22px;
+        background: #ffffff;
+        border: 2px solid var(--green);
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: var(--green);
+        letter-spacing: 0.04em;
+        font-size: 11px;
+        text-align: center;
+        line-height: 1.15;
+        padding: 8px;
+      }
+      .brand-mark span { display: block; font-size: 14px; }
+      .brand-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: var(--ink-soft);
+      }
+      .nav { display: flex; flex-direction: column; gap: 2px; }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--ink-soft);
+        cursor: default;
+      }
+      .nav-item .left { display: flex; align-items: center; gap: 12px; }
+      .nav-item .icon {
+        width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        color: var(--ink-soft);
+      }
+      .nav-item .chev { opacity: 0.45; font-size: 10px; }
+      .nav-item.active {
+        background: var(--green-soft);
+        color: var(--green-deep);
+      }
+      .nav-item.active .icon { color: var(--green-deep); }
+      .nav-sub {
+        margin: 4px 0 4px 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-left: 10px;
+        border-left: 1px solid var(--line-strong);
+      }
+      .nav-sub a {
+        padding: 6px 10px;
+        font-size: 12px;
+        color: var(--muted);
+        border-radius: 6px;
+        text-decoration: none;
+      }
+      .nav-sub a.active {
+        background: #ffffff;
+        color: var(--green-deep);
+        font-weight: 600;
+        border: 1px solid var(--line);
+      }
+
+      /* Main */
+      .main { display: flex; flex-direction: column; min-width: 0; }
+      .topbar {
+        height: 60px;
+        padding: 0 32px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 22px;
+        border-bottom: 1px solid var(--line);
+        background: var(--bg);
+      }
+      .topbar .icn {
+        width: 22px;
+        height: 22px;
+        color: var(--ink-soft);
+      }
+      .logout {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .content {
+        padding: 28px 32px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .page-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .page-head h1 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .head-actions { display: flex; align-items: center; gap: 16px; }
+      .open-sheet { color: var(--ink); font-weight: 600; text-decoration: none; font-size: 13px; }
+      .btn {
+        background: var(--green-deep);
+        color: #ffffff;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 700;
+        font-size: 13px;
+        border: 0;
+        box-shadow: var(--shadow);
+      }
+
+      /* Stat cards */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .stat {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 20px;
+      }
+      .stat-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .stat-value {
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--green-deep);
+        letter-spacing: -0.01em;
+      }
+
+      /* Search */
+      .search {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* Pay period card */
+      .period {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .period-head {
+        display: grid;
+        grid-template-columns: minmax(220px, auto) 1fr auto auto auto;
+        align-items: center;
+        gap: 32px;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--line);
+      }
+      .period-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .caret {
+        width: 0; height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 7px solid var(--green-deep);
+      }
+      .period-range {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--green-deep);
+      }
+      .period-date {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .period-meta {
+        display: flex;
+        gap: 44px;
+        margin-left: auto;
+      }
+      .meta-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+      }
+      .meta-value {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--green-deep);
+        margin-top: 4px;
+      }
+      .send-btn {
+        background: #b9c4be;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        border: 0;
+        cursor: not-allowed;
+      }
+
+      /* Table */
+      table { width: 100%; border-collapse: collapse; }
+      thead th {
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        padding: 14px 14px;
+        background: #faf7ee;
+        border-bottom: 1px solid var(--line);
+      }
+      thead th.num, tbody td.num { text-align: right; }
+      tbody td {
+        padding: 18px 14px;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--ink);
+        vertical-align: top;
+      }
+      tbody tr:last-child td { border-bottom: 0; }
+      .who { display: flex; flex-direction: column; gap: 4px; }
+      .who .name { font-weight: 700; }
+      .who .email { font-size: 12px; color: var(--muted); }
+      .role { color: var(--ink-soft); }
+      td.dash { color: var(--muted); text-align: center; }
+      td.money { font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ===== SIDEBAR ===== -->
+      <aside class="side">
+        <div class="brand">
+          <div class="brand-mark">TALENT<span>PORTAL</span></div>
+          <div class="brand-label">DEMO WORKSPACE</div>
+        </div>
+        <nav class="nav">
+          <div class="nav-item">
+            <span class="left"><span class="icon">▦</span> MY PORTAL</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">▤</span> DASHBOARD</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">◍</span> MANAGE EMPLOYEES</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">⌘</span> ORG CHART</span>
+            <span class="chev">▸</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">☑</span> REQUESTS / APPROVALS</span>
+            <span class="chev">▸</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">▥</span> CALENDAR</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">✉</span> MEMOS</span>
+          </div>
+          <div class="nav-item active">
+            <span class="left"><span class="icon">◐</span> PAYROLL</span>
+            <span class="chev">▾</span>
+          </div>
+          <div class="nav-sub">
+            <a>Payroll (Scrin.io BETA)</a>
+            <a class="active">Payroll</a>
+            <a>My Payslip</a>
+            <a>Disputes</a>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">⛶</span> TICKETS</span>
+            <span class="chev">▸</span>
+          </div>
+          <div class="nav-item">
+            <span class="left"><span class="icon">✎</span> SURVEYS</span>
+            <span class="chev">▸</span>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- ===== MAIN ===== -->
+      <div class="main">
+        <div class="topbar">
+          <span class="icn">🔔</span>
+          <span class="icn">?</span>
+          <span class="logout">⎋ Logout</span>
+        </div>
+
+        <div class="content">
+          <div class="page-head">
+            <h1>Payroll</h1>
+            <div class="head-actions">
+              <a class="open-sheet" href="#">Open Sheet ↗</a>
+              <button class="btn">Refresh</button>
+            </div>
+          </div>
+
+          <!-- stats -->
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-label">PAY PERIODS</div>
+              <div class="stat-value">24</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">RECORDS</div>
+              <div class="stat-value">742</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">LIFETIME PAYOUT</div>
+              <div class="stat-value">$312,480.00</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">LAST SYNCED</div>
+              <div class="stat-value">3:42:15 AM</div>
+            </div>
+          </div>
+
+          <!-- search -->
+          <div class="search">Search name, email, or role…</div>
+
+          <!-- period card -->
+          <div class="period">
+            <div class="period-head">
+              <div class="period-title">
+                <span class="caret"></span>
+                <div>
+                  <div class="period-range">05/15 – 05/21</div>
+                  <div class="period-date">Payroll date: 05/22/26</div>
+                </div>
+              </div>
+              <div></div>
+              <div class="period-meta">
+                <div>
+                  <div class="meta-label">EMPLOYEES</div>
+                  <div class="meta-value">52</div>
+                </div>
+                <div>
+                  <div class="meta-label">HOURS</div>
+                  <div class="meta-value">2,184.50</div>
+                </div>
+                <div>
+                  <div class="meta-label">TOTAL PAYOUT</div>
+                  <div class="meta-value">$21,460.75</div>
+                </div>
+              </div>
+              <div></div>
+              <button class="send-btn">Send Payslips (0)</button>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>ROLE</th>
+                  <th class="num">RATE</th>
+                  <th class="num">HOURS</th>
+                  <th class="num">BASE PAY</th>
+                  <th class="num">COMMISSIONS</th>
+                  <th class="num">BONUS</th>
+                  <th class="num">DEDUCTIONS</th>
+                  <th class="num">ADJUSTMENTS</th>
+                  <th class="num">HTVA</th>
+                  <th class="num">VPS</th>
+                  <th class="num">PARTNERSHIP FEES</th>
+                  <th class="num">NET</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="who"><span class="name">Alex Morgan</span><span class="email">alex@democo.example</span></div></td>
+                  <td class="role">CSM</td>
+                  <td class="num money">$8.00</td>
+                  <td class="num money">65.45</td>
+                  <td class="num money">$523.60</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$100.00</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$623.60</td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="name">Brianna Cole</span><span class="email">brianna@democo.example</span></div></td>
+                  <td class="role">Reports Analyst</td>
+                  <td class="num money">$6.00</td>
+                  <td class="num money">59.75</td>
+                  <td class="num money">$358.50</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$59.75</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$59.75</td>
+                  <td class="num money">$298.75</td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="name">Carlos Reyes</span><span class="email">carlos@democo.example</span></div></td>
+                  <td class="role">Setter</td>
+                  <td class="num money">$6.00</td>
+                  <td class="num money">40.03</td>
+                  <td class="num money">$240.18</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$40.03</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$40.03</td>
+                  <td class="num money">$200.15</td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="name">Dana Whitfield</span><span class="email">dana@democo.example</span></div></td>
+                  <td class="role">Affiliate Asst</td>
+                  <td class="num money">$6.00</td>
+                  <td class="num money">35.00</td>
+                  <td class="num money">$210.00</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$210.00</td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="name">Ethan Park</span><span class="email">ethan@democo.example</span></div></td>
+                  <td class="role">Credit Repair</td>
+                  <td class="num money">$6.00</td>
+                  <td class="num money">44.32</td>
+                  <td class="num money">$265.92</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$44.32</td>
+                  <td class="dash">—</td>
+                  <td class="num money">$44.32</td>
+                  <td class="num money">$221.60</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

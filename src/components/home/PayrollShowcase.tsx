@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import UiMock from "../ui/UiMock";
 
 export default function PayrollShowcase() {
   return (
@@ -39,9 +40,11 @@ export default function PayrollShowcase() {
             </Link>
           </div>
         </div>
-        <div className="placeholder" style={{ aspectRatio: "4 / 3" }}>
-          <span className="placeholder-label">Payroll screen — real shot</span>
-        </div>
+        <UiMock
+          url="app.talentportal.io/payroll"
+          src="/payroll.png"
+          alt="TalentPortal payroll screen"
+        />
       </div>
     </section>
   );

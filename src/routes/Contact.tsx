@@ -23,7 +23,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="contact-info-list">
+          {/* <div className="contact-info-list">
             <div className="info-item">
               <div className="info-icon">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -78,7 +78,7 @@ export default function Contact() {
                 <div className="info-value">Mon–Fri · 8:00 AM – 6:00 PM PT</div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* RIGHT: Form */}

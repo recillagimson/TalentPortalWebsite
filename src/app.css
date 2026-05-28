@@ -820,10 +820,8 @@ p { margin: 0; text-wrap: pretty; }
 .powered-brand .ht-mark {
   width: 32px; height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--tw-primary), color-mix(in oklab, var(--tw-primary) 50%, var(--accent)));
-  display: grid; place-items: center;
-  color: #fff; font-weight: 600; font-size: 14px;
-  font-family: var(--font-display);
+  object-fit: cover;
+  display: block;
 }
 .powered-brand .ht-name {
   font-family: var(--font-display);

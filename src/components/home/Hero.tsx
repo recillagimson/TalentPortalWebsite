@@ -11,7 +11,7 @@ export default function Hero() {
             HR that <em>finally</em> feels like it was built for your team.
           </h1>
           <p className="sub">
-            TalentPortal handles employee records, payroll, leaves, org charts and tickets — so you can stop
+            TalentPortal handles employee records, payroll, leaves, org charts and tickets so you can stop
             juggling spreadsheets and start growing the team you actually want.
           </p>
           <div className="hero-cta">
